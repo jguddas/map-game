@@ -10,9 +10,12 @@ icon = leaflet.icon({
   iconAnchor: [5, 30],
 });
 
-el = document.createElement('div')
-el.setAttribute('id', 'map')
-document.body.appendChild(el)
+['counter','kmleft','nextCity','map'].map(id ->
+  el = document.createElement('div')
+  el.setAttribute('id', id)
+  el.setAttribute('class', 'components')
+  document.body.appendChild(el)
+)
 
 
 map = leaflet.map('map')
