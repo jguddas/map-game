@@ -28,7 +28,7 @@ randomCity() ->
     Math.floor(Math.random() * (euCapitals.length - 1))
   ]
 
-current = randomCity()
+let current = randomCity()
 
 let marker
 setMarker({ lat, long }) ->
@@ -38,6 +38,7 @@ setMarker({ lat, long }) ->
 onClick({ latlng }) ->
   console.log(getDistance(latlng, current))
   setMarker(current)
+  now current = randomCity()
 
 getDistance({ lat: lat1, lng: lon1 },{ lat: lat2, long: lon2 }) ->
   deg2rad(deg) ->
