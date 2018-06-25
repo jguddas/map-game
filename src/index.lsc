@@ -22,7 +22,11 @@ map.setView({ lat: 53.54030739150022, lng: 9.843750000000002}, 3)
 map.on('click', onClick)
 
 randomCity() ->
-  euCapitals[Math.floor(Math.random() * euCapitals.length)]
+  euCapitals.filter(({ capitalCity }) ->
+    current?.capitalCity != capitalCity
+  )[
+    Math.floor(Math.random() * (euCapitals.length - 1))
+  ]
 
 current = randomCity()
 
