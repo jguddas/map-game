@@ -3,5 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Jakob Guddas <jakob.guddas@openmailbox.org>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "jumpstart start",
+    "built": "jumpstart build"
+  },
+  "dependencies": {
+    "jumpstart-cli": "^2.3.5",
+    "leaflet": "^1.3.1"
+  }
 }
