@@ -1,0 +1,15 @@
+import leaflet from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import './style.sass'
+import euCountries from './eu-countries.json'
+
+el = document.createElement('div')
+el.setAttribute('id', 'map')
+document.body.appendChild(el)
+
+
+map = leaflet.map('map')
+map.createPane('labels')
+leaflet.geoJson(euCountries).addTo(map)
+map.setView({ lat: 53.54030739150022, lng: 9.843750000000002}, 3)
+
