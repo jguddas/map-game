@@ -4,19 +4,19 @@ import './style.sass'
 import euCountries from './eu-countries.json'
 import { capitalCities as euCapitals } from './eu-capitals.json'
 
+let current, left, count, marker
 icon = leaflet.icon({
   iconUrl: require('./flag.png'),
   iconSize: [32,32],
   iconAnchor: [5, 30],
 });
 
-['counter','kmleft','nextCity','map'].map(id ->
+[counter, kmleft, nextCity] = ['counter','kmleft','nextCity','map'].map(id ->
   el = document.createElement('div')
   el.setAttribute('id', id)
   el.setAttribute('class', 'components')
   document.body.appendChild(el)
 )
-
 
 map = leaflet.map('map')
 map.createPane('labels')
@@ -31,17 +31,39 @@ randomCity() ->
     Math.floor(Math.random() * (euCapitals.length - 1))
   ]
 
-let current = randomCity()
+info(distance) ->
+  counter.textContent = `${count} cities placed`
+  if left < 0:
+    kmleft.textContent = `Click to restart`
+    kmleft.style.cursor = 'pointer'
+    nextCity.style.display = 'none'
+  else:
+    kmleft.textContent = `${left} kilometers left`
+    nextCity.textContent = `Select the location of "${current.capitalCity}"`
+    nextCity.style.display = 'block'
+    kmleft.style.cursor = 'default'
 
-let marker
+start() ->
+  if marker: marker.remove()
+  now current = randomCity()
+  now left = 1500
+  now count = 0
+  info()
+
 setMarker({ lat, long }) ->
   if marker: marker.remove()
   now marker = leaflet.marker([lat, long], { icon }).addTo(map)
 
 onClick({ latlng }) ->
-  console.log(getDistance(latlng, current))
+  if left <= 0: retrun
+  distance = Math.round(getDistance(latlng, current))
   setMarker(current)
+  console.log(`You clicked ${distance} kilometers away from ${current.capitalCity}`)
   now current = randomCity()
+  now count += 1
+  if distance > 50:
+    now left -= distance
+  info(distance)
 
 getDistance({ lat: lat1, lng: lon1 },{ lat: lat2, long: lon2 }) ->
   deg2rad(deg) ->
@@ -56,3 +78,5 @@ getDistance({ lat: lat1, lng: lon1 },{ lat: lat2, long: lon2 }) ->
   c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
   R * c // Distance in km
 
+start()
+kmleft.addEventListener('click', -> if left <= 0: start() )
