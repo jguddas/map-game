@@ -1,4 +1,4 @@
-import leaflet from 'leaflet'
+import leaflet from 'leaflet/dist/leaflet'
 import 'leaflet/dist/leaflet.css'
 import './style.sass'
 import euCountries from './eu-countries.json'
@@ -11,12 +11,13 @@ icon = leaflet.icon({
   iconAnchor: [5, 30],
 });
 
-[counter, kmleft, nextCity] = ['counter','kmleft','nextCity','map'].map(id ->
-  el = document.createElement('div')
-  el.setAttribute('id', id)
-  el.setAttribute('class', 'components')
-  document.body.appendChild(el)
-)
+[counter, kmleft, nextCity, mapEl, last] =
+  ['counter','kmleft','nextCity','map','last'].map(id ->
+    el = document.createElement('div')
+    el.setAttribute('id', id)
+    el.setAttribute('class', 'components')
+    document.body.appendChild(el)
+  )
 
 map = leaflet.map('map')
 mapStyle = { color: '#7ac9ff', fillColor: '#a1a1a1', weight: 2 }
@@ -31,8 +32,9 @@ randomCity() ->
     Math.floor(Math.random() * (euCapitals.length - 1))
   ]
 
-info(distance) ->
+info(distance, lastCity) ->
   counter.textContent = `${count} cities placed`
+  last.textContent = `You clicked ${distance} kilometers away from ${lastCity}.`
   if left < 0:
     kmleft.textContent = `Click to restart`
     kmleft.style.cursor = 'pointer'
@@ -49,6 +51,8 @@ start() ->
   now left = 1500
   now count = 0
   info()
+  last.textContent = `If you click more than 50km away from the
+  target the distance will be subtracted from your available kilometers.`
 
 setMarker({ lat, long }) ->
   if marker: marker.remove()
@@ -57,13 +61,13 @@ setMarker({ lat, long }) ->
 onClick({ latlng }) ->
   if left <= 0: retrun
   distance = Math.round(getDistance(latlng, current))
+  { capitalCity } = current
   setMarker(current)
-  console.log(`You clicked ${distance} kilometers away from ${current.capitalCity}`)
   now current = randomCity()
   now count += 1
   if distance > 50:
     now left -= distance
-  info(distance)
+  info(distance, capitalCity)
 
 getDistance({ lat: lat1, lng: lon1 },{ lat: lat2, long: lon2 }) ->
   deg2rad(deg) ->
