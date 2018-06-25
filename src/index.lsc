@@ -21,7 +21,10 @@ leaflet.geoJson(euCountries).addTo(map)
 map.setView({ lat: 53.54030739150022, lng: 9.843750000000002}, 3)
 map.on('click', onClick)
 
-current = euCapitals[0]
+randomCity() ->
+  euCapitals[Math.floor(Math.random() * euCapitals.length)]
+
+current = randomCity()
 
 let marker
 setMarker({ lat, long }) ->
