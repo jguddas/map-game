@@ -19,8 +19,8 @@ icon = leaflet.icon({
 )
 
 map = leaflet.map('map')
-map.createPane('labels')
-leaflet.geoJson(euCountries).addTo(map)
+mapStyle = { color: '#7ac9ff', fillColor: '#a1a1a1', weight: 2 }
+leaflet.geoJson(euCountries, { style: mapStyle }).addTo(map)
 map.setView({ lat: 53.54030739150022, lng: 9.843750000000002}, 3)
 map.on('click', onClick)
 
